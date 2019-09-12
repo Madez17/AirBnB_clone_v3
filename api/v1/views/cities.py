@@ -56,7 +56,7 @@ def post_city(state_id):
         else:
             return make_response(jsonify({'error': 'Missing name'}), 400)
     else:
-        return make_response(jsonify({'error': 'Not a JSON'}), 400)
+        return make_response(jsonify({'error': 'Not a JSON'}), 404)
 
 
 @app_views.route("/cities/<city_id>", strict_slashes=False, methods=['PUT'])
