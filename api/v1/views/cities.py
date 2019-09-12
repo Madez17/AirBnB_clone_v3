@@ -15,3 +15,26 @@ def list_cities_json(state_id):
     else:
         for iter in filter_states.cities:
             list_city_to_json.append(iter.to_dict())
+        return jsonify(list_city_to_json)
+
+
+@app_views.route("/cities/<city_id>", methods=['GET'], strict_slashes=False)
+def list_cities_id(city_id):
+    filter_id_city = storage.get("City", city_id)
+    if filter_id_city is None:
+        abort(404)
+    return jsonify(filter_id_city.to_dict())
+
+
+@app_views.route("/cities/<city_id>",
+                 methods=['DELETE'], strict_slashes=False)
+def list_cities_delete(city_id):
+    """Method delete"""
+    filter_id_city = storage.get("City", city_id)
+    if filter_id_city is None:
+        abort(404)
+    else:
+        storage.delete(filter_id_city)
+        storage.save()
+        dict_state = {}
+        return (jsonify(dict_state))
