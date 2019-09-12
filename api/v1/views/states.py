@@ -53,9 +53,9 @@ def post_states():
             name.save()
             return jsonify(name.to_dict()), 201
         else:
-            return make_response(jsonify({'Missing name': 400}))
+            return make_response(jsonify({'error': 'Missing name'}), 400)
     else:
-        return make_response(jsonify({'Not a JSON': 400}))
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
 
 
 @app_views.route("/states/<state_id>", strict_slashes=False, methods=['PUT'])
@@ -73,4 +73,4 @@ def put_states(state_id):
         var.save()
         return jsonify(var.to_dict())
     else:
-        return make_response(jsonify({'Not a JSON': 400}))
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
