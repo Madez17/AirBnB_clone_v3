@@ -9,6 +9,7 @@ from flask import Flask, jsonify, request, abort, make_response
 
 @app_views.route("/states", strict_slashes=False, methods=['GET'])
 def list_states_json():
+    """ Method GET show all states"""
     list_to_json = []
     all_objects = storage.all("State")
 
