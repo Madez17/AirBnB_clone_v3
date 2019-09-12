@@ -4,6 +4,8 @@ from api.v1.views import app_views
 from models.state import State, City
 from models import storage
 from flask import Flask, jsonify, request, abort, make_response
+
+
 @app_views.route("/states/<state_id>/cities", strict_slashes=False,
                  methods=['GET'])
 def list_cities_json(state_id):
@@ -55,3 +57,21 @@ def post_city(state_id):
             return make_response(jsonify({'error': 'Missing name'}), 400)
     else:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
+
+
+@app_views.route("/cities/<city_id>", strict_slashes=False, methods=['PUT'])
+def put_cities(city_id):
+    """Method put"""
+    filter_id_city = storage.get("City", city_id)
+    restrictions = ["id", "update_at", "create_at", "state_id"]
+    if filter_id_city is None:
+        abort(404)
+    if request.get_json():
+        req = request.get_json()
+        for key, value in req.items():
+            if key not in restrictions:
+                setattr(filter_id_city, key, value)
+        filter_id_city.save()
+        return jsonify(filter_id_city.to_dict())
+    else:
+        return make_response(jsonfilter_id_city({'error': 'Not a JSON'}), 400)
