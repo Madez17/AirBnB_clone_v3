@@ -16,7 +16,7 @@ def list_states_json():
     return (jsonify(list_to_json))
 
 
-@app_views.route("/states/<state_id>", strict_slashes=False, methods=['GET'])
+@app_views.route("/states/<state_id>", methods=['GET'], strict_slashes=False)
 def list_states_id(state_id):
     var = models.storage.get("State", state_id)
     if var is None:
@@ -26,7 +26,7 @@ def list_states_id(state_id):
         return(jsonify(objet_list))
 
 
-@app_views.route("/states/<state_id>", strict_slashes=False, methods=['DELETE'])
+@app_views.route("/states/<state_id>", methods=['DELETE'], strict_slashes=False)
 def list_states_delete(state_id):
     var = models.storage.get("State", state_id)
     if var is None:
@@ -34,5 +34,12 @@ def list_states_delete(state_id):
     else:
         models.storage.delete(var)
         models.storage.save()
-        dict_state = []
+        dict_state = {}
         return (jsonify(dict_state))
+
+@app_views.route("/states", strict_slashes=False, methods=['POST'])
+    def fucn():
+    try:
+        if not request.is_json()
+            raise JSONBadRequest('Not a JSON', 400)
+        return "Not a JSON"
