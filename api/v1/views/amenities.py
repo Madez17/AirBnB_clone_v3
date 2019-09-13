@@ -17,16 +17,15 @@ def list_amenities_json():
     return jsonify(amenities_list)
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['GET'],
+@app_views.route("/amenities/<amenity_id>", methods=['GET'],
                  strict_slashes=False)
 def list_amenities_id(amenity_id):
     """Method list"""
     amenity = storage.get("Amenity", amenity_id)
-    if amenity is None:
+    if not amenity:
         abort(404)
-    else:
-        format_amenity = amenity.to_dict()
-        return jsonify(format_amenity)
+    format_amenity = amenity.to_dict()
+    return jsonify(format_amenity)
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
@@ -34,12 +33,11 @@ def list_amenities_id(amenity_id):
 def list_amenities_delete(amenity_id):
     """Method delete"""
     amenity = storage.get("Amenity", amenity_id)
-    if amenity is None:
+    if not amenity:
         abort(404)
-    else:
-        storage.delete(amenity)
-        storage.save()
-        return jsonify({})
+    storage.delete(amenity)
+    storage.save()
+    return jsonify({})
 
 
 @app_views.route('/amenities', methods=['POST'],
