@@ -75,8 +75,7 @@ class FileStorage:
         for key, value in self.__objects.items():
             if key == search_key:
                 return value
-            else:
-                return None
+        return None
 
     def count(self, cls=None):
         """ Methond to retrive one object"""
