@@ -58,11 +58,11 @@ def post_reviw(place_id):
 
     if not request.get_json():
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
-    
+
     dic = request.get_json()
     if "user_id" not in dic:
         return make_response(jsonify({"error": 'Missing user_id'}), 400)
-    
+
     get_user = storage.get("User", dic["user_id"])
 
     if get_user is None:
