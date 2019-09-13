@@ -39,21 +39,25 @@ def list_amenities_delete(amenity_id):
     storage.save()
     return jsonify({})
 
-
 @app_views.route('/amenities', methods=['POST'],
                  strict_slashes=False)
-def post_amenities():
-    """Method post"""
-    if request.get_json():
-        amenity_req = request.get_json()
-        if "name" in dic:
-            name = Amenity(**amenity_req)
-            name.save()
-            return jsonify(name.to_dict()), 201
-        else:
-            return make_response(jsonify({'error': 'Missing name'}), 400)
+def create_amenity():
+    '''
+       Creates a new Amenity object and saves it to storage
+    '''
+    if not request.json:
+        return jsonify({"error": "Not a JSON"}), 400
     else:
-        return make_response(jsonify({'error': 'Not a JSON'}), 400)
+        amenity_dict = request.get_json()
+        if "name" in amenity_dict:
+            amenity_name = amenity_dict["name"]
+            amenity = Amenity(name=amenity_name)
+            for k, v in amenity_dict.items():
+                setattr(amenity, k, v)
+            amenity.save()
+            return jsonify(amenity.to_dict()), 201
+        else:
+            return jsonify({"error": "Missing name"}), 400
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['PUT'],
