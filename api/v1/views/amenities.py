@@ -39,6 +39,7 @@ def list_amenities_delete(amenity_id):
     storage.save()
     return jsonify({}), 200
 
+
 @app_views.route('/amenities', methods=['POST'],
                  strict_slashes=False)
 def create_amenity():
