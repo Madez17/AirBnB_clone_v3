@@ -3,7 +3,10 @@
 
 from api.v1.views import app_views
 from models.state import State
-from models import storage, Place, City, User
+from models.user import User
+from models.review import Review
+from models.place import Place
+from models.cities import City
 from flask import Flask, jsonify, request, abort, make_response
 
 
@@ -66,10 +69,10 @@ def post_place():
     place_.save()
     return jsonify(place_.to_dict()), 201
 
-
+"""
 @app_views.route("/states/<state_id>", strict_slashes=False, methods=['PUT'])
 def put_states(state_id):
-    """Method put"""
+    ""Method put""
     var = storage.get("State", state_id)
     restrictions = ["id", "update_at", "create_at"]
     if var is None:
@@ -83,3 +86,4 @@ def put_states(state_id):
         return jsonify(var.to_dict())
     else:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
+"""
