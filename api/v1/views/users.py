@@ -52,8 +52,8 @@ def post_users():
             if key != "email":
                 return make_response(jsonify({"error": 'Missing email'}), 400)
             if key != "password":
-                return make_response(jsonify({"error": 'Missing password'})
-                                    ,400)
+                return make_response(jsonify({"error": 'Missing\
+                                             password'}), 400)
         user = User(**dic)
         user.save()
         return jsonify(user.to_dict()), 201
