@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 """comment of class"""
 from api.v1.views import app_views
-from models.state import State, City
+from models.state import State
+from models.city import City
 from models import storage
 from flask import Flask, jsonify, request, abort, make_response
 
