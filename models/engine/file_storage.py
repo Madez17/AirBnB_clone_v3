@@ -70,14 +70,12 @@ class FileStorage:
         self.reload()
 
     def get(self, cls, id):
-        """ Methond to retrive object one"""
-        save_object = self.all(cls)
+        """ Methond to retrive one object"""
         search_key = cls + '.' + id
-        for key, value in save_object.items():
+        for key, value in self.__objects.items():
             if key == search_key:
                 return value
-            else:
-                return None
+        return None
 
     def count(self, cls=None):
         """ Methond to retrive one object"""
