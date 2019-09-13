@@ -48,12 +48,11 @@ def post_users():
     """Method post"""
     if request.get_json():
         dic = request.get_json()
-        for key, value in dic.items():
-            if key != "email":
-                return make_response(jsonify({"error": 'Missing email'}), 400)
-            if key != "password":
-                return make_response(jsonify({"error": 'Missing\
-                                             password'}), 400)
+        if "email" not in dic:
+            return make_response(jsonify({"error": 'Missing email'}), 400)
+        if "password" not in dic:
+            return make_response(jsonify
+                                 ({"error": 'Missing password'}), 400)
         user = User(**dic)
         user.save()
         return jsonify(user.to_dict()), 201
@@ -62,7 +61,7 @@ def post_users():
 
 
 @app_views.route("/users/<user_id>", strict_slashes=False, methods=['PUT'])
-def put_users(state_id):
+def put_users(user_id):
     """Method put"""
     var = storage.get("User", user_id)
     restrictions = ["id", "email", "update_at", "create_at"]
@@ -74,6 +73,6 @@ def put_users(state_id):
             if key not in restrictions:
                 setattr(var, key, value)
         var.save()
-        return jsonify(var.to_dict(), 200)
+        return jsonify(var.to_dict()), 200
     else:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
