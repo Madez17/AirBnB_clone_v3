@@ -11,10 +11,10 @@ from flask import Flask, jsonify, request, abort, make_response
 
 @app_views.route("/places/<place_id>/reviews", strict_slashes=False,
                  methods=['GET'])
-def list_review_json():
+def list_review_json(place_id):
     """ Method GET show all Places """
     list_to_json = []
-    all_objects = storage.all("Place")
+    all_objects = storage.all("Review")
 
     for key, value in all_objects.items():
         list_to_json.append(value.to_dict())
@@ -51,26 +51,29 @@ def list_review_delete(review_id):
                  methods=['POST'])
 def post_reviw(place_id):
     """Method post"""
+    print("Holi")
     filter_place = storage.get("Place", place_id)
     if filter_place is None:
         abort(404)
 
-    if request.get_json():
-        dic = request.get_json()
-        if "user" not in dic:
-            return make_response(jsonify({"error": 'Missing user_id'}), 400)
-        else:
-            user = storage.get("User", dic["user"])
-            if user is None:
-                abort(404)
-        if "text" not in dic:
-            return make_response(jsonify
-                                 ({"error": 'Missing text'}), 400)
-        review = Review(**dic)
-        review.save()
-        return jsonify(user.to_dict()), 201
-    else:
+    if not request.get_json():
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
+    
+    dic = request.get_json()
+    if "user_id" not in dic:
+        return make_response(jsonify({"error": 'Missing user_id'}), 400)
+    
+    get_user = storage.get("User", dic["user_id"])
+
+    if get_user is None:
+        abort(404)
+    if "text" not in dic:
+        return make_response(jsonify
+                             ({"error": 'Missing text'}), 400)
+    dic["place_id"] = place_id
+    review = Review(**dic)
+    review.save()
+    return jsonify(review.to_dict()), 201
 
 
 @app_views.route("/reviews/<review_id>", strict_slashes=False,
