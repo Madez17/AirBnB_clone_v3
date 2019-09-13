@@ -70,7 +70,7 @@ class FileStorage:
         self.reload()
 
     def get(self, cls, id):
-        """ Methond to retrive one object"""
+        """ Methond to retrive object one"""
         save_object = self.all(cls)
         search_key = cls + '.' + id
         for key, value in save_object.items():
