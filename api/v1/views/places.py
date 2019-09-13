@@ -7,6 +7,7 @@ from models.user import User
 from models.review import Review
 from models.place import Place
 from models.city import City
+from models import storage
 from flask import Flask, jsonify, request, abort, make_response
 
 
@@ -50,9 +51,9 @@ def list_place_delete(place_id):
 
 @app_views.route("/cities/<city_id>/places", strict_slashes=False,
                  methods=['POST'])
-def post_place():
+def post_place(city_id):
     """Method post"""
-    dic = storage.get("City", city_id)
+    city_obj = storage.get("City", city_id)
     if city_obj is None:
         abort(404)
     if not request.get_json():
@@ -63,8 +64,9 @@ def post_place():
     get_user = storage.get("User", user_["user_id"])
     if get_user is None:
         abort(404)
-    if "name" not in dic:
+    if "name" not in user_:
         return make_response(jsonify({"error": "Missing name"}), 400)
+    user_["city_id"] = city_id
     place_ = Place(**user_)
     place_.save()
     return jsonify(place_.to_dict()), 201
