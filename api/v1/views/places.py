@@ -6,7 +6,7 @@ from models.state import State
 from models.user import User
 from models.review import Review
 from models.place import Place
-from models.cities import City
+from models.city import City
 from flask import Flask, jsonify, request, abort, make_response
 
 
@@ -69,12 +69,12 @@ def post_place():
     place_.save()
     return jsonify(place_.to_dict()), 201
 
-"""
-@app_views.route("/states/<state_id>", strict_slashes=False, methods=['PUT'])
-def put_states(state_id):
-    ""Method put""
-    var = storage.get("State", state_id)
-    restrictions = ["id", "update_at", "create_at"]
+
+@app_views.route("/places/<place_id>", strict_slashes=False, methods=['PUT'])
+def put_place(place_id):
+    """Method put"""
+    var = storage.get("Place", place_id)
+    restrictions = ["id", "update_at", "create_at", "user_id", "city_id"]
     if var is None:
         abort(404)
     if request.get_json():
@@ -86,4 +86,3 @@ def put_states(state_id):
         return jsonify(var.to_dict())
     else:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
-"""
