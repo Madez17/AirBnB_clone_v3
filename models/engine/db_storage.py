@@ -82,8 +82,7 @@ class DBStorage:
         for key, value in save_object.items():
             if key == search_key:
                 return value
-            else:
-                return None
+        return None
 
     def count(self, cls=None):
         """ Methond to retrive one object"""
