@@ -40,7 +40,7 @@ def list_users_delete(user_id):
         storage.delete(var)
         storage.save()
         dict_state = {}
-        return (jsonify(dict_state))
+        return (jsonify(dict_state), 200)
 
 
 @app_views.route("/users", strict_slashes=False, methods=['POST'])
@@ -74,6 +74,6 @@ def put_users(state_id):
             if key not in restrictions:
                 setattr(var, key, value)
         var.save()
-        return jsonify(var.to_dict())
+        return jsonify(var.to_dict(), 200)
     else:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
