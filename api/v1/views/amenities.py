@@ -17,16 +17,15 @@ def list_amenities_json():
     return jsonify(amenities_list)
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['GET'],
+@app_views.route("/amenities/<amenity_id>", methods=['GET'],
                  strict_slashes=False)
 def list_amenities_id(amenity_id):
     """Method list"""
     amenity = storage.get("Amenity", amenity_id)
-    if amenity is None:
+    if not amenity:
         abort(404)
-    else:
-        format_amenity = amenity.to_dict()
-        return jsonify(format_amenity)
+    format_amenity = amenity.to_dict()
+    return jsonify(format_amenity)
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
@@ -34,44 +33,45 @@ def list_amenities_id(amenity_id):
 def list_amenities_delete(amenity_id):
     """Method delete"""
     amenity = storage.get("Amenity", amenity_id)
-    if amenity is None:
+    if not amenity:
         abort(404)
-    else:
-        storage.delete(amenity)
-        storage.save()
-        return jsonify({})
+    storage.delete(amenity)
+    storage.save()
+    return jsonify({}), 200
 
 
 @app_views.route('/amenities', methods=['POST'],
                  strict_slashes=False)
-def post_amenities():
-    """Method post"""
-    if request.get_json():
-        amenity_req = request.get_json()
-        if "name" in dic:
-            name = Amenity(**amenity_req)
-            name.save()
-            return jsonify(name.to_dict()), 201
-        else:
-            return make_response(jsonify({'error': 'Missing name'}), 400)
+def create_amenity():
+    """Comment method"""
+    if not request.json:
+        return jsonify({"error": "Not a JSON"}), 400
     else:
-        return make_response(jsonify({'error': 'Not a JSON'}), 400)
+        amenity_dict = request.get_json()
+        if "name" in amenity_dict:
+            amenity_name = amenity_dict["name"]
+            amenity = Amenity(name=amenity_name)
+            for k, v in amenity_dict.items():
+                setattr(amenity, k, v)
+            amenity.save()
+            return jsonify(amenity.to_dict()), 201
+        else:
+            return jsonify({"error": "Missing name"}), 400
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['PUT'],
                  strict_slashes=False)
-def put_ameniy(amenity_id):
-    """Method put"""
+def update_amenity(amenity_id):
+    """Comment method"""
     amenity = storage.get("Amenity", amenity_id)
-    restrictions = ["id", "update_at", "create_at"]
-    if amenity is None:
+    if not amenity:
         abort(404)
-    elif request.get_json():
-        req = request.get_json()
-        for key, value in req.items():
-            if key not in restrictions:
-                setattr(var, key, value)
-        amenity.save()
-        return jsonify(amenity.to_dict())
-    else:
-        return make_response(jsonify({'error': 'Not a JSON'}), 400)
+    if not request.json:
+        return jsonify({"error": "Not a JSON"}), 400
+
+    req = request.get_json()
+    for k, v in req.items():
+        if k != "id" or k != "created_at" or k != "updated_at":
+            setattr(amenity, k, v)
+    amenity.save()
+    return jsonify(amenity.to_dict()), 200
