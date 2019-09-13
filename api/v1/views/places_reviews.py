@@ -18,7 +18,7 @@ def list_review_json(place_id):
     var = storage.get("Place", place_id)
     if var is None:
         abort(404)
- 
+
     for key, value in all_objects.items():
         list_to_json.append(value.to_dict())
     return (jsonify(list_to_json))
@@ -54,7 +54,6 @@ def list_review_delete(review_id):
                  methods=['POST'])
 def post_reviw(place_id):
     """Method post"""
-    print("Holi")
     filter_place = storage.get("Place", place_id)
     if filter_place is None:
         abort(404)
