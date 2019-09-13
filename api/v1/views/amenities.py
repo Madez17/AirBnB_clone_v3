@@ -42,9 +42,7 @@ def list_amenities_delete(amenity_id):
 @app_views.route('/amenities', methods=['POST'],
                  strict_slashes=False)
 def create_amenity():
-    '''
-       Creates a new Amenity object and saves it to storage
-    '''
+    """Comment method"""
     if not request.json:
         return jsonify({"error": "Not a JSON"}), 400
     else:
@@ -62,18 +60,17 @@ def create_amenity():
 
 @app_views.route('/amenities/<amenity_id>', methods=['PUT'],
                  strict_slashes=False)
-def put_ameniy(amenity_id):
-    """Method put"""
+def update_amenity(amenity_id):
+    """Comment method"""
     amenity = storage.get("Amenity", amenity_id)
-    restrictions = ["id", "update_at", "create_at"]
-    if amenity is None:
+    if not amenity:
         abort(404)
-    elif request.get_json():
-        req = request.get_json()
-        for key, value in req.items():
-            if key not in restrictions:
-                setattr(var, key, value)
-        amenity.save()
-        return jsonify(amenity.to_dict())
-    else:
-        return make_response(jsonify({'error': 'Not a JSON'}), 400)
+    if not request.json:
+        return jsonify({"error": "Not a JSON"}), 400
+
+    req = request.get_json()
+    for k, v in req.items():
+        if k != "id" or k != "created_at" or k != "updated_at":
+            setattr(amenity, k, v)
+    amenity.save()
+    return jsonify(amenity.to_dict()), 200
