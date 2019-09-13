@@ -15,7 +15,10 @@ def list_review_json(place_id):
     """ Method GET show all Places """
     list_to_json = []
     all_objects = storage.all("Review")
-
+    var = storage.get("Place", place_id)
+    if var is None:
+        abort(404)
+ 
     for key, value in all_objects.items():
         list_to_json.append(value.to_dict())
     return (jsonify(list_to_json))
