@@ -10,7 +10,7 @@ from flask import Flask, jsonify, request, abort, make_response
 @app_views.route("/amenities", strict_slashes=False, methods=['GET'])
 def list_amenities_json():
     """Method GET"""
-   amenities = storage.all("Amenity")
+    amenities = storage.all("Amenity")
     amenities_list = []
     for key, value in amenities.items():
         amenities_list.append(value.to_dict())
@@ -25,8 +25,8 @@ def list_amenities_id(amenity_id):
     if amenity is None:
         abort(404)
     else:
-          format_amenity = amenity.to_dict()
-          return jsonify(format_amenity)
+        format_amenity = amenity.to_dict()
+        return jsonify(format_amenity)
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
@@ -46,7 +46,7 @@ def list_amenities_delete(amenity_id):
                  strict_slashes=False)
 def post_amenities():
     """Method post"""
-   if request.get_json():
+    if request.get_json():
         amenity_req = request.get_json()
         if "name" in dic:
             name = Amenity(**amenity_req)
