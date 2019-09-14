@@ -51,7 +51,7 @@ def post_city(state_id):
     filter_state = storage.get("State", state_id)
     if filter_state is None:
         abort(404)
-    if request.get_json():
+    if request.is_json:
         dic = request.get_json()
         if "name" in dic:
             dic["state_id"] = state_id
@@ -71,7 +71,7 @@ def put_cities(city_id):
     restrictions = ["id", "update_at", "create_at", "state_id"]
     if filter_id_city is None:
         abort(404)
-    if request.get_json():
+    if request.is_json:
         req = request.get_json()
         for key, value in req.items():
             if key not in restrictions:
