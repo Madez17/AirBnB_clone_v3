@@ -48,12 +48,11 @@ def list_cities_delete(city_id):
                  methods=['POST'])
 def post_city(state_id):
     """ Method post """
+    filter_state = storage.get("State", state_id)
+    if filter_state is None:
+        abort(404)
     if request.is_json:
         dic = request.get_json()
-        filter_state = storage.get("State", state_id)
-        if filter_state is None:
-            abort(404)
-
         if "name" in dic:
             dic["state_id"] = state_id
             name = City(**dic)
@@ -68,13 +67,12 @@ def post_city(state_id):
 @app_views.route("/cities/<city_id>", strict_slashes=False, methods=['PUT'])
 def put_cities(city_id):
     """ Method put """
+    filter_id_city = storage.get("City", city_id)
+    restrictions = ["id", "update_at", "create_at", "state_id"]
+    if filter_id_city is None:
+        abort(404)
     if request.is_json:
         req = request.get_json()
-
-        filter_id_city = storage.get("City", city_id)
-        restrictions = ["id", "update_at", "create_at", "state_id"]
-        if filter_id_city is None:
-            abort(404)
         for key, value in req.items():
             if key not in restrictions:
                 setattr(filter_id_city, key, value)
